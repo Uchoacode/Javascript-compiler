@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>JavaScript Compiler</title>
     <style>
         body {
             font-family: "Poppins", sans-serif;
@@ -36,40 +36,52 @@
             font-weight: 600;
             font-size: 24px;
             margin-bottom: 20px;
-            color: #fff;
+            color: #ffffff;
+        }
+        span {
+            color: rgb(193, 178, 11);
         }
         textarea {
             width: 100%;
             height: 200px;
             padding: 10px;
-            font-size: 16px;
+            font-size: 18px;
             border: none;
             border-radius: 10px;
             resize: vertical;
             background-color: #333;
             color: #fff;
-            margin-bottom: 10px; /* Ajuste no margin para todos os dispositivos */
-            
+            margin-bottom: 10px;
         }
         button {
-            background-color: #456089;
+            background-color: #4dae2f;
             color: #fff;
             border: none;
             padding: 10px 20px;
             margin-top: 2rem;
-
             font-size: 16px;
             font-weight: bold;
             cursor: pointer;
             border-radius: 10px;
         }
         button:hover {
-            background-color: #444;
+            background-color: #50791a;
         }
         .result {
             margin-top: 20px;
             font-size: 16px;
             color: #fff;
+            background-color: #1E1E1E;
+            padding: 10px;
+            border-radius: 10px;
+            white-space: pre-wrap;
+            text-align: left;
+        }
+        .clear-btn {
+            background-color: #ec4141;
+        }
+        .clear-btn:hover {
+            background-color: #c9302c;
         }
         footer {
             width: 100%;
@@ -97,15 +109,14 @@
         .icon:hover {
             fill: #ccc;
         }
-        
         @media (max-width: 600px) {
             .container {
                 padding: 10px;
             }
             textarea {
                 height: 150px;
-                font-size: 18px; /* adjust font size for mobile devices */
-                padding: 4px; /* adjust padding for mobile devices */
+                font-size: 18px;
+                padding: 4px;
             }
         }
     </style>
@@ -114,9 +125,10 @@
 <body>
     <body>
         <div class="container">
-            <h1>Compilador de Código JavaScript</h1>
+            <h1>Compilador de Código <span>JavaScript</span></h1>
             <textarea id="codeInput" placeholder="Digite seu código aqui..."></textarea>
             <button onclick="compileCode()">Compilar</button>
+            <button class="clear-btn" onclick="clearCode()">Limpar</button>
             <div class="result" id="resultOutput"></div>
         </div>
     <footer>
@@ -145,15 +157,37 @@
     </footer>
 
     <script>
-         function compileCode(){
-            const code = document.getElementById('codeInput').value;
-            try{
-                eval(code);
-                document.getElementById('resultOutput').innerHTML = 'Código compilado com sucesso!';
-            } catch (error){
-                document.getElementById('resultOutput').innerHTML = 'Erro ao compilar o código: ' + error.message;
+        function compileCode() {
+            var code = document.getElementById("codeInput").value;
+            var result = document.getElementById("resultOutput");
+            result.innerHTML = "Compilando...";
+            const codeInput = document.getElementById('codeInput').value;
+            const resultOutput = document.getElementById('resultOutput');
+
+            try {
+                const log = [];
+                console.log = function(...args) {
+                    log.push(args.join(' '));
+                };
+                eval(codeInput);
+                resultOutput.textContent = log.join('\n');
+            } catch (error) {
+                resultOutput.textContent = `Erro: ${error.message}`;
             }
-         }
+        }
+
+        function clearCode() {
+            document.getElementById('codeInput').value = '';
+            document.getElementById('resultOutput').textContent = '';
+        }
+
+
+        document.getElementById('codeInput').addEventListener('keydown', function(event) {
+            if (event.key === 'Enter' && !event.shiftKey) {
+                event.preventDefault();
+                compileCode();
+            }
+        });
     </script>
 </body>
 </html>
