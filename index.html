@@ -162,18 +162,27 @@
                 var code = document.getElementById("codeInput").value;
                 var result = document.getElementById("resultOutput");
                 result.innerHTML = "Compilando...";
-                const codeInput = document.getElementById("codeInput").value;
-                const resultOutput = document.getElementById("resultOutput");
+        
+                // Substituir aspas curvas por aspas retas
+                const correctedCode = code.replace(/[“”‘’]/g, function(match) {
+                    switch (match) {
+                        case '“': return '"';
+                        case '”': return '"';
+                        case '‘': return "'";
+                        case '’': return "'";
+                        default: return match;
+                    }
+                });
         
                 try {
                     const log = [];
                     console.log = function(...args) {
                         log.push(args.join(" "));
                     };
-                    eval(codeInput);
-                    resultOutput.textContent = log.join("\n");
+                    eval(correctedCode);
+                    result.textContent = log.join("\n");
                 } catch (error) {
-                    resultOutput.textContent = `Erro: ${error.message}`;
+                    result.textContent = `Erro: ${error.message}`;
                 }
             }
         
@@ -189,6 +198,7 @@
                 }
             });
         </script>
+        
         
     </body>
     </html>
